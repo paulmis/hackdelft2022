@@ -2,15 +2,11 @@ import requests
 import os
 import json
 import matplotlib.pyplot as plt
+import pandas as pd
 
 bearer_token = os.environ.get("BEARER_TOKEN")
 
 search_url = "https://api.twitter.com/2/tweets/counts/recent"
-
-query_params = {
-    'query': '#war #ukraine',
-    'granularity': 'day'
-}
 
 def bearer_oauth(r):
     """
@@ -31,22 +27,33 @@ def connect_to_endpoint(url, params):
 
 
 def main():
-    json_response = connect_to_endpoint(search_url, query_params)
-    #print(json.dumps(json_response, indent=4, sort_keys=True))
 
-    number_of_tweets = []
-    dates = []
-    parsed_json = json.loads(json.dumps(json_response, indent=4, sort_keys=True))
-    for lol in parsed_json['data']:
-        parsed_lol = json.loads(json.dumps(lol, indent=4, sort_keys=True))
-        number_of_tweets.append(parsed_lol['tweet_count'])
-        dates.append(parsed_lol['start'][5:10])
+    data = pd.read_csv('./data/countries.csv')
+    for country in data['country']:
+        query_string = "#war #" + country
+        query_params = {
+        'query': query_string,
+        'granularity': 'day'
+        }
+        print(country) 
+        json_response = connect_to_endpoint(search_url, query_params) 
+        #print(json.dumps(json_response, indent=4, sort_keys=True))
 
-    plt.plot(dates, number_of_tweets)
-    plt.title("#war per day")
-    plt.xlabel("Date")
-    plt.ylabel("# of #war")
-    plt.savefig('lol.png')
+        number_of_tweets = []
+        dates = []
+        parsed_json = json.loads(json.dumps(json_response, indent=4, sort_keys=True))
+        for lol in parsed_json['data']:
+            parsed_lol = json.loads(json.dumps(lol, indent=4, sort_keys=True))
+            number_of_tweets.append(parsed_lol['tweet_count'])
+            dates.append(parsed_lol['start'][5:10])
+
+        name = country + ".png"
+        plt.plot(dates, number_of_tweets)
+        plt.title(country)
+        plt.xlabel("Date")
+        plt.ylabel("# of #war")
+        plt.savefig(name)
+        plt.close()
 
 
 if __name__ == "__main__":
