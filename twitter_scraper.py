@@ -25,6 +25,14 @@ def connect_to_endpoint(url, params):
         raise Exception(response.status_code, response.text)
     return response.json()
 
+def make_plot(name, dates, number_of_tweets):
+    plt.plot(dates, number_of_tweets)
+    plt.title(name)
+    plt.xlabel("Date")
+    plt.ylabel("# of #war")
+    plt.savefig(name + ".png")
+    plt.close()
+
 
 def main():
 
@@ -47,14 +55,8 @@ def main():
             number_of_tweets.append(parsed_lol['tweet_count'])
             dates.append(parsed_lol['start'][5:10])
 
-        name = country + ".png"
-        plt.plot(dates, number_of_tweets)
-        plt.title(country)
-        plt.xlabel("Date")
-        plt.ylabel("# of #war")
-        plt.savefig(name)
-        plt.close()
-
+        make_plot(country, dates, number_of_tweets)
+        
 
 if __name__ == "__main__":
     main()
