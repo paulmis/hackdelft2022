@@ -18,5 +18,10 @@ for entry in terms:
         trends(gov, 'asylum', entry['language'], entry['asylum'], entry['code'], entry['nationality'])
     normalized["war " + entry['language'] + " " + entry['nationality']] = \
         trends(gov, 'war', entry['language'], entry['war'], entry['code'], entry['nationality'])
+    normalized["netherlands " + entry['language'] + " " + entry['nationality']] = \
+        trends(gov, 'netherlands', entry['language'], entry['netherlands'], entry['code'], entry['nationality'])
+    if ('taliban' in entry):
+        normalized["taliban " + entry['language'] + " " + entry['nationality']] = \
+            trends(gov, 'taliban', entry['language'], entry['taliban'], entry['code'], entry['nationality'])
 
 print(normalized, sep = "\n")
