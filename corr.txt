@@ -1,0 +1,6 @@
+[['netherlands Arabic Syrian'], 0.6314189862414517]
+[['asylum Arabic Iraqi'], 0.682657106608261]
+[['asylum Persian Iranian'], 0.7493014712242481]
+[['asylum Arabic Syrian'], 0.7718389145189659]
+[['asylum Persian Afghan'], 0.7931479032417804]
+[['taliban Pashto Afghan'], 0.8439603214750752]
