@@ -32,10 +32,22 @@ req_by_nat = req_by_nat.loc[req_by_nat['requests'] > total / 50]
 countries = set(req_by_nat.index)
 
 # Plot the data
-df = df.loc[df['nationality'].isin(countries)]
-df = df.pivot(index='period',columns='nationality',values='requests')
-df.plot.line()
+# Plot the general graph
+pdf = df.loc[df['nationality'].isin(countries)]
+pdf = pdf.pivot(index='period',columns='nationality',values='requests')
+pdf.plot.line(figsize=(16,9))
 plt.ylabel("# of asylum requests")
 plt.xlabel("Time")
-plt.title("Asylum requests in the Netherlands   by nationality from 2013 to 2022")
-plt.show()
+plt.title("Asylum requests in the Netherlands  by nationality from 2013 to 2022")
+plt.savefig("data/global.jpg")
+
+# Plot individual graphs
+for country in countries:
+    if country != "Total":
+        pdf = df.loc[df['nationality'] == country]
+        pdf = pdf.pivot(index='period',columns='nationality',values='requests')
+        pdf.plot.line(figsize=(10,5))
+        plt.ylabel("# of asylum requests")
+        plt.xlabel("Time")
+        plt.title(country + " asylum requests in the Netherlands from 2013 to 2022")
+        plt.savefig("data/nl-past-applications/" + country + ".jpg")
