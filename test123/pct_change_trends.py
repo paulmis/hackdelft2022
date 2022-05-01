@@ -7,6 +7,7 @@ import pandas as pd
 from pytrends.request import TrendReq
 import seaborn as sn
 import numpy as np
+import math
 
 
 month_to_nr = list(calendar.month_name)
@@ -16,7 +17,7 @@ def trends(gov, eng_term, lang, term, country, nationality):
     pytrends = TrendReq()
     kw_list = [term]
 
-    print(eng_term, lang, country)
+    # print(eng_term, lang, country)
     pytrends.build_payload(kw_list, cat=0, timeframe='2013-01-01 2022-03-31', geo=country, gprop='')
     google = pytrends.interest_over_time()[term]
     google = google.rename("searches").pct_change().rolling(7).sum()
@@ -37,21 +38,39 @@ def trends(gov, eng_term, lang, term, country, nationality):
     A = np.vstack([d, np.ones(len(gov_pd))])
     a, b = np.linalg.lstsq(A.T, gov_pd.values, rcond=None)[0]
     
-    arr = (a*d + np.full(d.shape, b))*google
-    plt.plot(d, gov_pd.values)
-    plt.plot(d, a*d + b, 'r')
-    plt.title("Base line" + nationality)
+    
+    buildup = []
+    prev = a*d[0] + b
+    maxi = 0
+    for (i, x) in enumerate(google.values):
+        if math.isnan(prev):
+            prev = 0
+        curr = a * d[i] + b + x * prev
+        maxi = max(maxi, curr)
+        buildup.append(curr)
+        prev = curr
+    # arr = (a*d + np.full(d.shape, b))*(google.values+1)
+    # print("the array!!!!!!!!!!!! ", buildup, google.values)
+    
+    plt.plot(gov_5date, gov_pd.values, label = 'CBSO data')
+    plt.plot(gov_5date, buildup, 'r', label = 'predicted')
+    plt.ylim(-5, maxi)
+    plt.title(eng_term + " " + lang + " " + " search in " + nationality)
     plt.xlabel("Date")
     plt.ylabel("Applications")
+    plt.legend()
     plt.show()
     
-    print(a)
+    
 
     info_string = eng_term + " " + lang + " " + " " + nationality
+    
+    predicted = pd.Series(data = buildup, index = gov_5date, name='predicted')
 
-    data_all = pd.concat([google[:-1], gov_pd[1:]], axis=1)
+    data_all = pd.concat([predicted, gov_pd], axis=1)
     norma_all = (data_all - data_all.mean()) / data_all.std()
-    norma_all.plot().set_xlabel(info_string)
-    plt.savefig("graphs/" + info_string + ".jpg")
+    # norma_all.plot().set_xlabel(info_string)
+    # plt.savefig("graphs/" + info_string + ".jpg")
+    # plt.close()
 
-    return norma_all.corr().searches.requests
+    return norma_all.corr().predicted.requests
