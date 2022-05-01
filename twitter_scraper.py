@@ -20,6 +20,9 @@ def bearer_oauth(r):
 
 
 def connect_to_endpoint(url, params):
+    """
+    Retrieves twitter data.
+    """
     response = requests.request("GET", search_url, auth=bearer_oauth, params=params)
     if response.status_code != 200:
         raise Exception(response.status_code, response.text)
@@ -67,14 +70,18 @@ def main():
     data = pd.read_csv('./data/countries.csv')
     dates_array = np.arange(0, len(dates))
 
+    trends = {}
+
     for country in data['country']:
         array = np.asarray(twitter_data[country])
         A = np.vstack([dates_array, np.ones(len(dates))])
         # a represnets steepnes of the linear aproximation of number of tweets 
         # therefore represents a trend that we could use to add to exisiting data
         a, b = np.linalg.lstsq(A.T, array, rcond=None)[0]
+        trends.update({country: a})
         #make_plot(country, dates_array, twitter_data[country], a, b)
     
+    print(trends)
 
 if __name__ == "__main__":
     main()
