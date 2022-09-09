@@ -1,13 +1,11 @@
-# About
-
-This repository contains a robust statistical model for predicting asylum application trends with social media, in particular using Google Trends. Built in 24 hours, it won the HackDelft 2022 hackathon challenge from the Dutch ministry of justice and service's IND (Immigratie en Naturalisatiedienst).
-
-<br>
 <p align="center">
     <img src='images/top.png' style='width:800px;' />
     <img src='images/bottom.png' />
 </p>
-<br>
+
+# About
+
+This repository contains a robust statistical model for predicting asylum application trends with social media, in particular using Google Trends. Built in 24 hours, it won the HackDelft 2022 hackathon challenge from the Dutch ministry of justice and service's IND (Immigratie en Naturalisatiedienst).
 
 ## Explanation
 IND has asked us to design a system that could help predict short-term changes in the quantity of asylum applications. At the time the asylum application processing team would often be either understaffed or overstaffed due to sharp changes in demand, leading to high costs and frequent delays. 
