@@ -1,10 +1,9 @@
 <p align="center">
     <img src='images/top.png' style='width:800px;' />
-    <img src='images/bottom.png' />
+    <br>
+    <i>Left - search trends and asylum requests for 'taliban' in Pashto within Afghanistan. Right - influence of major geopolitical events in somalia on the number of asylum requests from Somalia.</i>
 </p>
-
-# About
-
+<br>
 This repository contains a robust statistical model for predicting asylum application trends with social media, in particular using Google Trends. Built in 24 hours, it won the HackDelft 2022 hackathon challenge from the Dutch ministry of justice and service's IND (Immigratie en Naturalisatiedienst).
 
 ## Explanation
